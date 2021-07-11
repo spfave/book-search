@@ -10,7 +10,24 @@ const resolvers = {
       const newUser = await User.create(newUserData);
       const token = signToken(newUser);
 
-      return { token, newUser };
+      return { token, user: newUser };
+    },
+
+    login: async (parent, { email, password }) => {
+      const user = await User.findOne({ email });
+      if (!user)
+        throw new AuthenticationError(
+          'No user found with provided credentials'
+        );
+
+      const correctPw = user.isCorrectPassword(password);
+      if (!correctPw)
+        throw new AuthenticationError(
+          'No user found with provided credentials'
+        );
+
+      const token = signToken(user);
+      return { token, user };
     },
   },
 };
