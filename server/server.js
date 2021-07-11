@@ -3,9 +3,10 @@ const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const path = require('path');
 
-// Database, GraphQL modules/packages
+// Database, GraphQL, Authorization modules/packages/middleware
 const db = require('./config/connection');
 const { typeDefs, resolvers } = require('./schemas');
+const { authMiddleware } = require('./utils/auth');
 const routes = require('./routes');
 
 // Server setup
@@ -15,7 +16,7 @@ const app = express();
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  // context: authMiddleware,
+  context: authMiddleware,
 });
 server.applyMiddleware({ app });
 
