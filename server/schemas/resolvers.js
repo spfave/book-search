@@ -7,7 +7,7 @@ const resolvers = {
     me: async (parent, args, context) => {
       if (!context.user)
         throw new AuthenticationError(
-          'You need  to be logged in to view content'
+          'You need to be logged in to view saved books'
         );
 
       return User.findOne({ _id: context.user._id }).populate('savedBooks');
@@ -37,6 +37,19 @@ const resolvers = {
 
       const token = signToken(user);
       return { token, user };
+    },
+
+    saveBook: async (parent, { book }, context) => {
+      if (!context.user)
+        throw new AuthenticationError('You need to be logged to save books');
+
+      const user = await User.findOneAndUpdate(
+        { _id: context.user._id },
+        { $addToSet: { savedBooks: book } },
+        { new: true }
+      );
+
+      return user;
     },
   },
 };
