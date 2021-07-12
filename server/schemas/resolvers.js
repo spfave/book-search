@@ -3,7 +3,16 @@ const { Book, User } = require('../models');
 const { signToken } = require('../utils/auth');
 
 const resolvers = {
-  Query: {},
+  Query: {
+    me: async (parent, args, context) => {
+      if (!context.user)
+        throw new AuthenticationError(
+          'You need  to be logged in to view content'
+        );
+
+      return User.findOne({ _id: context.user._id }).populate('savedBooks');
+    },
+  },
 
   Mutation: {
     addUser: async (parent, newUserData) => {
