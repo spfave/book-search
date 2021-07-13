@@ -29,7 +29,7 @@ const resolvers = {
           'No user found with provided credentials'
         );
 
-      const correctPw = user.isCorrectPassword(password);
+      const correctPw = await user.isCorrectPassword(password);
       if (!correctPw)
         throw new AuthenticationError(
           'No user found with provided credentials'
