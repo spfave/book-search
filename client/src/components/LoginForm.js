@@ -17,6 +17,8 @@ const LoginForm = () => {
     setUserFormData({ ...userFormData, [name]: value });
   };
 
+  const [login, { error }] = useMutation(LOGIN_USER);
+
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
@@ -28,15 +30,18 @@ const LoginForm = () => {
     }
 
     try {
-      const response = await loginUser(userFormData);
+      const { data } = await login({ variables: { ...userFormData } });
+      Auth.login(data.login.token);
 
-      if (!response.ok) {
-        throw new Error('something went wrong!');
-      }
+      // const response = await loginUser(userFormData);
 
-      const { token, user } = await response.json();
-      console.log(user);
-      Auth.login(token);
+      // if (!response.ok) {
+      //   throw new Error('something went wrong!');
+      // }
+
+      // const { token, user } = await response.json();
+      // console.log(user);
+      // Auth.login(token);
     } catch (err) {
       console.error(err);
       setShowAlert(true);
@@ -63,7 +68,7 @@ const LoginForm = () => {
         <Form.Group>
           <Form.Label htmlFor='email'>Email</Form.Label>
           <Form.Control
-            type='text'
+            type='email'
             placeholder='Your email'
             name='email'
             onChange={handleInputChange}
@@ -97,6 +102,10 @@ const LoginForm = () => {
           Submit
         </Button>
       </Form>
+
+      {error && (
+        <div className='my-3 p-3 bg-danger text-white'>{error.message}</div>
+      )}
     </>
   );
 };
