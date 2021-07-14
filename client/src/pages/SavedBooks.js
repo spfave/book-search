@@ -18,7 +18,9 @@ import Auth from '../utils/auth';
 const SavedBooks = () => {
   // const [userData, setUserData] = useState({});
 
-  const { loading, data } = useQuery(QUERY_ME);
+  const { loading, data } = useQuery(QUERY_ME, {
+    fetchPolicy: 'cache-and-network',
+  });
   const userData = data?.me || data?.user || {};
 
   const [removeBook, { error }] = useMutation(REMOVE_BOOK);
