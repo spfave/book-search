@@ -5,10 +5,12 @@ export const QUERY_ME = gql`
     me {
       username
       bookCount
-      saveBooks {
+      savedBooks {
         bookId
         authors
         title
+        image
+        link
       }
     }
   }
