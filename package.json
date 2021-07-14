@@ -4,6 +4,7 @@
   "description": "",
   "main": "server/server.js",
   "scripts": {
+    "predeploy": "npm run build",
     "start": "node server/server.js",
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "dev:server": "cd server && npm run watch",
