@@ -10,7 +10,9 @@ const resolvers = {
           'You need to be logged in to view saved books'
         );
 
-      return User.findOne({ _id: context.user._id }).populate('savedBooks');
+      return await User.findOne({ _id: context.user._id }).populate(
+        'savedBooks'
+      );
     },
   },
 
