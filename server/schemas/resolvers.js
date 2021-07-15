@@ -4,6 +4,7 @@ const { signToken } = require('../utils/auth');
 
 const resolvers = {
   Query: {
+    // Query a single user by their token id
     me: async (parent, args, context) => {
       if (!context.user)
         throw new AuthenticationError(
@@ -17,6 +18,7 @@ const resolvers = {
   },
 
   Mutation: {
+    // create a new user, return with a signed token
     addUser: async (parent, newUserData) => {
       const newUser = await User.create(newUserData);
       const token = signToken(newUser);
@@ -24,6 +26,7 @@ const resolvers = {
       return { token, user: newUser };
     },
 
+    // Login a user, return with a signed token
     login: async (parent, { email, password }) => {
       const user = await User.findOne({ email });
       if (!user)
@@ -41,6 +44,7 @@ const resolvers = {
       return { token, user };
     },
 
+    // Save a book to a user's savedBooks list
     saveBook: async (parent, { book }, context) => {
       if (!context.user)
         throw new AuthenticationError('You need to be logged to save books');
@@ -54,6 +58,7 @@ const resolvers = {
       return user;
     },
 
+    // Remove a book from a user's saveBooks list
     removeBook: async (parent, { bookId }, context) => {
       if (!context.user)
         throw new AuthenticationError('You need to be logged to remove books');
