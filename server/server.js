@@ -7,7 +7,6 @@ const path = require('path');
 const db = require('./config/connection');
 const { typeDefs, resolvers } = require('./schemas');
 const { authMiddleware } = require('./utils/auth');
-const routes = require('./routes');
 
 // Server setup
 const PORT = process.env.PORT || 3001;
@@ -28,8 +27,6 @@ app.use(express.json());
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/build')));
 }
-
-app.use(routes);
 
 // Start database connection and server
 db.once('open', () => {
